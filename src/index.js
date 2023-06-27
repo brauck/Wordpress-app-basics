@@ -8,10 +8,13 @@ import {
 import { useState, render } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
-import { decodeEntities } from "@wordpress/html-entities";
+
 
 import { SnackbarList } from "@wordpress/components";
 import { store as noticesStore } from "@wordpress/notices";
+
+import PagesList from "./components/PagesList";
+
 
 function Notifications() {
   const notices = useSelect((select) => select(noticesStore).getNotices(), []);
@@ -59,59 +62,7 @@ function MyFirstApp() {
   );
 }
 
-export function EditPageForm({ pageId, onCancel, onSaveFinished }) {
-  const { editEntityRecord } = useDispatch(coreDataStore);
-  const handleChange = (title) =>
-    editEntityRecord("postType", "page", pageId, { title });
-  const { saveEditedEntityRecord } = useDispatch(coreDataStore);
-  const handleSave = async () => {
-    const updatedRecord = await saveEditedEntityRecord(
-      "postType",
-      "page",
-      pageId
-    );
-    if (updatedRecord) {
-      onSaveFinished();
-    }
-  };
-  const { isSaving, hasEdits, lastError, page } = useSelect(
-    (select) => ({
-      isSaving: select(coreDataStore).isSavingEntityRecord(
-        "postType",
-        "page",
-        pageId
-      ),
-      hasEdits: select(coreDataStore).hasEditsForEntityRecord(
-        "postType",
-        "page",
-        pageId
-      ),
-      page: select(coreDataStore).getEditedEntityRecord(
-        "postType",
-        "page",
-        pageId
-      ),
-      lastError: select(coreDataStore).getLastEntitySaveError(
-        "postType",
-        "page",
-        pageId
-      ),
-    }),
-    [pageId]
-  );
 
-  return (
-    <PageForm
-      title={page.title}
-      onChangeTitle={handleChange}
-      hasEdits={hasEdits}
-      lastError={lastError}
-      isSaving={isSaving}
-      onCancel={onCancel}
-      onSave={handleSave}
-    />
-  );
-}
 
 export function CreatePageForm({ onCancel, onSaveFinished }) {
   const [title, setTitle] = useState();
@@ -190,38 +141,6 @@ export function PageForm({
   );
 }
 
-function PagesList({ hasResolved, pages }) {
-  if (!hasResolved) {
-    return <Spinner />;
-  }
-  if (!pages?.length) {
-    return <div>No results</div>;
-  }
-
-  return (
-    <table className="wp-list-table widefat fixed striped table-view-list">
-      <thead>
-        <tr>
-          <td>Title</td>
-        </tr>
-      </thead>
-      <tbody>
-        {pages?.map((page) => (
-          <tr key={page.id}>
-            <td>{decodeEntities(page.title.rendered)}</td>
-            <td>
-              <div className="form-buttons">
-                <PageEditButton pageId={page.id} />
-                <DeletePageButton pageId={page.id} />
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
 window.addEventListener(
   "load",
   function () {
@@ -230,27 +149,7 @@ window.addEventListener(
   false
 );
 
-function PageEditButton({ pageId }) {
-  const [isOpen, setOpen] = useState(false);
-  const openModal = () => setOpen(true);
-  const closeModal = () => setOpen(false);
-  return (
-    <>
-      <Button onClick={openModal} variant="primary">
-        Edit
-      </Button>
-      {isOpen && (
-        <Modal onRequestClose={closeModal} title="Edit page">
-          <EditPageForm
-            pageId={pageId}
-            onCancel={closeModal}
-            onSaveFinished={closeModal}
-          />
-        </Modal>
-      )}
-    </>
-  );
-}
+
 
 function CreatePageButton() {
   const [isOpen, setOpen] = useState(false);
