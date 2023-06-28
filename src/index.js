@@ -14,6 +14,7 @@ import { SnackbarList } from "@wordpress/components";
 import { store as noticesStore } from "@wordpress/notices";
 
 import PagesList from "./components/PagesList";
+import { CreatePageButton } from "./components/buttons";
 
 
 function Notifications() {
@@ -56,7 +57,7 @@ function MyFirstApp() {
         <SearchControl onChange={setSearchTerm} value={searchTerm} />
         <CreatePageButton />
       </div>
-      <PagesList hasResolved={hasResolved} pages={pages} />
+      <PagesList hasResolved={hasResolved} pages={pages} onChange={setSearchTerm} value={searchTerm} />
       <Notifications />
     </div>
   );
@@ -64,42 +65,7 @@ function MyFirstApp() {
 
 
 
-export function CreatePageForm({ onCancel, onSaveFinished }) {
-  const [title, setTitle] = useState();
-  const { lastError, isSaving } = useSelect(
-    (select) => ({
-      lastError: select(coreDataStore).getLastEntitySaveError(
-        "postType",
-        "page"
-      ),
-      isSaving: select(coreDataStore).isSavingEntityRecord("postType", "page"),
-    }),
-    []
-  );
 
-  const { saveEntityRecord } = useDispatch(coreDataStore);
-  const handleSave = async () => {
-    const savedRecord = await saveEntityRecord("postType", "page", {
-      title,
-      status: "publish",
-    });
-    if (savedRecord) {
-      onSaveFinished();
-    }
-  };
-
-  return (
-    <PageForm
-      title={title}
-      onChangeTitle={setTitle}
-      hasEdits={!!title}
-      onSave={handleSave}
-      lastError={lastError}
-      onCancel={onCancel}
-      isSaving={isSaving}
-    />
-  );
-}
 
 export function PageForm({
   title,
@@ -150,24 +116,6 @@ window.addEventListener(
 );
 
 
-
-function CreatePageButton() {
-  const [isOpen, setOpen] = useState(false);
-  const openModal = () => setOpen(true);
-  const closeModal = () => setOpen(false);
-  return (
-    <>
-      <Button onClick={openModal} variant="primary">
-        Create a new Page
-      </Button>
-      {isOpen && (
-        <Modal onRequestClose={closeModal} title="Create a new page">
-          <CreatePageForm onCancel={closeModal} onSaveFinished={closeModal} />
-        </Modal>
-      )}
-    </>
-  );
-}
 
 function DeletePageButton({ pageId }) {
   const { createSuccessNotice, createErrorNotice } = useDispatch(noticesStore);

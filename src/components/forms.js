@@ -1,3 +1,4 @@
+import { useState } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
 import { render } from "@wordpress/element";
@@ -11,7 +12,7 @@ import {
 export function EditPageForm({ pageId, onCancel, onSaveFinished }) {
   const { editEntityRecord } = useDispatch(coreDataStore);
   const handleChange = (title) =>
-    editEntityRecord("postType", "page", pageId, { title });
+    editEntityRecord("postType", "page", pageId, { title/*, date: -1*/ }); // use data in comment to envoke the error
   const { saveEditedEntityRecord } = useDispatch(coreDataStore);
   const handleSave = async () => {
     const updatedRecord = await saveEditedEntityRecord(
@@ -58,6 +59,43 @@ export function EditPageForm({ pageId, onCancel, onSaveFinished }) {
       isSaving={isSaving}
       onCancel={onCancel}
       onSave={handleSave}
+    />
+  );
+}
+
+export function CreatePageForm({ onCancel, onSaveFinished }) {
+  const [title, setTitle] = useState();
+  const { lastError, isSaving } = useSelect(
+    (select) => ({
+      lastError: select(coreDataStore).getLastEntitySaveError(
+        "postType",
+        "page"
+      ),
+      isSaving: select(coreDataStore).isSavingEntityRecord("postType", "page"),
+    }),
+    []
+  );
+
+  const { saveEntityRecord } = useDispatch(coreDataStore);
+  const handleSave = async () => {
+    const savedRecord = await saveEntityRecord("postType", "page", {
+      title,
+      status: "publish",
+    });
+    if (savedRecord) {
+      onSaveFinished();
+    }
+  };
+
+  return (
+    <PageForm
+      title={title}
+      onChangeTitle={setTitle}
+      hasEdits={!!title}
+      onSave={handleSave}
+      lastError={lastError}
+      onCancel={onCancel}
+      isSaving={isSaving}
     />
   );
 }
