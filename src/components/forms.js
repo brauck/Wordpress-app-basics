@@ -80,8 +80,7 @@ export function CreatePageForm({ onCancel, onSaveFinished }) {
   const handleSave = async () => {
     const savedRecord = await saveEntityRecord("postType", "page", {
       title,
-      status: "publish",
-    });
+      status: "publish"/*, date: -1*/ }); // use data in comment to envoke the error
     if (savedRecord) {
       onSaveFinished();
     }
