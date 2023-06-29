@@ -1,1 +1,1 @@
-Example of gutenberg app creating.
+Example of gutenberg app creation from Wordpress course.
