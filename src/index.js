@@ -10,26 +10,14 @@ import { useSelect, useDispatch } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
 
 
-import { SnackbarList } from "@wordpress/components";
-import { store as noticesStore } from "@wordpress/notices";
+
 
 import PagesList from "./components/PagesList";
+import Notifications from "./components/Notifications";
 import { CreatePageButton } from "./components/buttons";
 
 
-function Notifications() {
-  const notices = useSelect((select) => select(noticesStore).getNotices(), []);
-  const { removeNotice } = useDispatch(noticesStore);
-  const snackbarNotices = notices.filter(({ type }) => type === "snackbar");
 
-  return (
-    <SnackbarList
-      notices={snackbarNotices}
-      className="components-editor-notices__snackbar"
-      onRemove={removeNotice}
-    />
-  );
-}
 
 function MyFirstApp() {
   const [searchTerm, setSearchTerm] = useState("");
