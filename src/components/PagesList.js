@@ -1,6 +1,6 @@
 import { Spinner } from "@wordpress/components";
 import { decodeEntities } from "@wordpress/html-entities";
-import { PageEditButton, CreatePageButton } from "./buttons";
+import { PageEditButton, DeletePageButton } from "./buttons";
 
 
 
@@ -28,7 +28,7 @@ export default function PagesList({ hasResolved, pages, onChange, value }) {
             <td>
               <div className="form-buttons">
                 <PageEditButton pageId={page.id} />
-               {/* <DeletePageButton pageId={page.id} />*/}
+                <DeletePageButton pageId={page.id} />
               </div>
             </td>
           </tr>

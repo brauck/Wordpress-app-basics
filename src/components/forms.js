@@ -1,7 +1,7 @@
 import { useState } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
-import { render } from "@wordpress/element";
+
 import {
   SearchControl,
   Spinner,
@@ -12,7 +12,7 @@ import {
 export function EditPageForm({ pageId, onCancel, onSaveFinished }) {
   const { editEntityRecord } = useDispatch(coreDataStore);
   const handleChange = (title) =>
-    editEntityRecord("postType", "page", pageId, { title/*, date: -1*/ }); // use data in comment to envoke the error
+    editEntityRecord("postType", "page", pageId, { title /*, date: -1*/ }); // use data in comment to envoke the error
   const { saveEditedEntityRecord } = useDispatch(coreDataStore);
   const handleSave = async () => {
     const updatedRecord = await saveEditedEntityRecord(
@@ -80,7 +80,8 @@ export function CreatePageForm({ onCancel, onSaveFinished }) {
   const handleSave = async () => {
     const savedRecord = await saveEntityRecord("postType", "page", {
       title,
-      status: "publish"/*, date: -1*/ }); // use data in comment to envoke the error
+      status: "publish" /*, date: -1*/,
+    }); // use data in comment to envoke the error
     if (savedRecord) {
       onSaveFinished();
     }
@@ -138,4 +139,3 @@ function PageForm({
     </div>
   );
 }
-

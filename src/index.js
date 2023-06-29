@@ -67,45 +67,7 @@ function MyFirstApp() {
 
 
 
-export function PageForm({
-  title,
-  onChangeTitle,
-  hasEdits,
-  lastError,
-  isSaving,
-  onCancel,
-  onSave,
-}) {
-  return (
-    <div className="my-gutenberg-form">
-      <TextControl label="Page title:" value={title} onChange={onChangeTitle} />
-      {lastError ? (
-        <div className="form-error">Error: {lastError.message}</div>
-      ) : (
-        false
-      )}
-      <div className="form-buttons">
-        <Button
-          onClick={onSave}
-          variant="primary"
-          disabled={!hasEdits || isSaving}
-        >
-          {isSaving ? (
-            <>
-              <Spinner />
-              Saving
-            </>
-          ) : (
-            "Save"
-          )}
-        </Button>
-        <Button onClick={onCancel} variant="tertiary" disabled={isSaving}>
-          Cancel
-        </Button>
-      </div>
-    </div>
-  );
-}
+
 
 window.addEventListener(
   "load",
@@ -117,58 +79,4 @@ window.addEventListener(
 
 
 
-function DeletePageButton({ pageId }) {
-  const { createSuccessNotice, createErrorNotice } = useDispatch(noticesStore);
-  // useSelect returns a list of selectors if you pass the store handle
-  // instead of a callback:
-  const { getLastEntityDeleteError } = useSelect(coreDataStore);
-  const handleDelete = async () => {
-    const success = await deleteEntityRecord("postType", "page", pageId);
-    if (success) {
-      // Tell the user the operation succeeded:
-      createSuccessNotice("The page was deleted!", {
-        type: "snackbar",
-      });
-    } else {
-      // We use the selector directly to get the error at this point in time.
-      // Imagine we fetched the error like this:
-      //     const { lastError } = useSelect( function() { /* ... */ } );
-      // Then, lastError would be null inside of handleDelete.
-      // Why? Because we'd refer to the version of it that was computed
-      // before the handleDelete was even called.
-      const lastError = getLastEntityDeleteError("postType", "page", pageId);
-      const message =
-        (lastError?.message || "There was an error.") +
-        " Please refresh the page and try again.";
-      // Tell the user how exactly the operation have failed:
-      createErrorNotice(message, {
-        type: "snackbar",
-      });
-    }
-  };
 
-  const { deleteEntityRecord } = useDispatch(coreDataStore);
-  const { isDeleting } = useSelect(
-    (select) => ({
-      isDeleting: select(coreDataStore).isDeletingEntityRecord(
-        "postType",
-        "page",
-        pageId
-      ),
-    }),
-    [pageId]
-  );
-
-  return (
-    <Button variant="primary" onClick={handleDelete} disabled={isDeleting}>
-      {isDeleting ? (
-        <>
-          <Spinner />
-          Deleting...
-        </>
-      ) : (
-        "Delete"
-      )}
-    </Button>
-  );
-}
