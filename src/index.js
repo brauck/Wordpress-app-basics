@@ -1,7 +1,5 @@
 import {
   SearchControl,
-  Spinner,
-  Button,
   TextControl,
   Modal,
 } from "@wordpress/components";
@@ -9,15 +7,9 @@ import { useState, render } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
 
-
-
-
 import PagesList from "./components/PagesList";
 import Notifications from "./components/Notifications";
 import { CreatePageButton } from "./components/buttons";
-
-
-
 
 function MyFirstApp() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,17 +37,16 @@ function MyFirstApp() {
         <SearchControl onChange={setSearchTerm} value={searchTerm} />
         <CreatePageButton />
       </div>
-      <PagesList hasResolved={hasResolved} pages={pages} onChange={setSearchTerm} value={searchTerm} />
+      <PagesList
+        hasResolved={hasResolved}
+        pages={pages}
+        onChange={setSearchTerm}
+        value={searchTerm}
+      />
       <Notifications />
     </div>
   );
 }
-
-
-
-
-
-
 
 window.addEventListener(
   "load",
@@ -64,7 +55,3 @@ window.addEventListener(
   },
   false
 );
-
-
-
-

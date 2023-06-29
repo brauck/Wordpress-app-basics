@@ -1,8 +1,7 @@
 import { Spinner } from "@wordpress/components";
 import { decodeEntities } from "@wordpress/html-entities";
+
 import { PageEditButton, DeletePageButton } from "./buttons";
-
-
 
 export default function PagesList({ hasResolved, pages, onChange, value }) {
   if (!hasResolved) {
@@ -13,8 +12,6 @@ export default function PagesList({ hasResolved, pages, onChange, value }) {
   }
 
   return (
-
-
     <table className="wp-list-table widefat fixed striped table-view-list">
       <thead>
         <tr>
@@ -35,6 +32,5 @@ export default function PagesList({ hasResolved, pages, onChange, value }) {
         ))}
       </tbody>
     </table>
- 
   );
 }

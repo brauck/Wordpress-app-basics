@@ -1,9 +1,7 @@
 import { useState } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { store as coreDataStore } from "@wordpress/core-data";
-
 import {
-  SearchControl,
   Spinner,
   Button,
   TextControl,
