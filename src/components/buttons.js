@@ -46,7 +46,7 @@ export function CreatePageButton() {
 }
 
 export function DeletePageButton({ pageId }) {
-  pageId = pageId * 1000;
+  // pageId = pageId * 1000; // to erase the error
   const { createSuccessNotice, createErrorNotice } = useDispatch(noticesStore);
   // useSelect returns a list of selectors if you pass the store handle
   // instead of a callback:
